@@ -183,6 +183,7 @@ public class UrlChecker {
      */
     public void startCheck(String tableName, Date date) throws SQLException, ParseException, InterruptedException {
 
+        this.tableName = tableName;
 
         Connection conn = this.databaseConnectionPool.getConnection();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
