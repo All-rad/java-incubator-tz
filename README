@@ -1,15 +1,16 @@
-Используемые зависимости для сборки и запуска проекта
+Requirements:
 openjdk 10.0.2 2018-07-17
 Apache Maven 3.5.2
 PostgreSQL 11.1
 
-Для сборки проекта необходимо выполнить команды
+Dependencies install:
 mvn install
+Build:
 mvn compile
 
-Для запуска
+Run (WARNING: root is required!)
 mvn exec:java -Dexec.mainClass=bitworks.tz.App
 
-Данная программа содержит драйвер и может работать только с БД PostgreSQL
+This application may by work only the PostgreSQL database.
 
-Конфигурационный файл содержит необходимые данные для подключения к БД и дату для фильтрации
+Database configuration and  limit date be located into config.ini file.

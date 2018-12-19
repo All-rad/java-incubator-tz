@@ -11,7 +11,7 @@ public class NetworkWatcher {
     private int trafficCounter = 0;
     private int streamSpeed = 0;
 
-    NetworkWatcher() throws PcapNativeException {
+    NetworkWatcher(){
         /**
          * Получение виртуального интерфейса any через который можно отслеживать
          * весь трафик через все интерфейсы
@@ -22,8 +22,14 @@ public class NetworkWatcher {
          * Создание обработчика прослушиваемых пакетов, при прослушке не
          * не происходит захвата содержимого пакетов, а только из подсчет
          */
-        PcapHandle handle = netInterface.openLive(0, PcapNetworkInterface.PromiscuousMode.PROMISCUOUS,
-                1);
+        PcapHandle handle = null;
+        try {
+            handle = netInterface.openLive(0, PcapNetworkInterface.PromiscuousMode.PROMISCUOUS,
+                    1);
+        } catch (PcapNativeException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
         PacketListener listener = (PcapPacket packet) -> {
             this.trafficCounter += packet.getOriginalLength();
         };
@@ -33,11 +39,13 @@ public class NetworkWatcher {
          * потоке так как это блокирующая операция которая может остановить
          * дальнейшее выполнение программы
          */
+        PcapHandle finalHandle = handle;
         new Thread(() -> {
             try {
-                handle.loop(-1, listener);
+                finalHandle.loop(-1, listener);
             } catch (PcapNativeException | InterruptedException | NotOpenException e) {
                 e.printStackTrace();
+                System.exit(-1);
             }
         }).start();
 
